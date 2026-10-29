@@ -1,0 +1,13 @@
+bin/
+obj/
+*.exe
+*.dll
+*.pdb
+ffmpeg*
+ffprobe*
+*.log
+log.txt
+logs/
+.vs/
+*.user
+Daten/*.dll

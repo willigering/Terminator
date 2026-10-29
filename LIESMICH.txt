@@ -1,0 +1,282 @@
+﻿NEUE EXE: "Terminator-3.16.exe" (liegt direkt in diesem Ordner)
+-----------------------------------------------------------
+Diese EXE hat das neue Symbol eingebaut und läuft für sich allein –
+du kannst sie direkt auf den Desktop kopieren und dort starten.
+Alte EXE-Dateien bzw. alte Desktop-Kopien bitte löschen. Durch den neuen
+Dateinamen zeigt Windows sofort das neue Symbol (kein alter Cache-Eintrag).
+
+Terminator
+==========
+Herunterfahr-Timer
+
+"Hasta la Vista, Windows!" – fährt den PC zu einer gewählten Zeit herunter,
+startet ihn neu oder schickt ihn in Energiesparen bzw. Ruhezustand.
+NEU in 3.16 – Parallax etwas ruhiger
+- Parallax-Verschiebung um ca. ein Drittel reduziert (max. ~3 px seitlich,
+  ~1,3 px vertikal), Eigendrift ohne Maus ebenfalls sanfter.
+- Sonst alles wie 3.15.
+
+NEU in 3.15 – Großbuchstaben, Parallax, Minimieren-Option
+- Titel jetzt "HASTA LA VISTA, WINDOWS" in Großbuchstaben, ohne Ausrufezeichen,
+  im selben Chrom-Schriftstil wie bisher.
+- Dezenter Parallax-Effekt: nur Himmel und ferne Skyline verschieben sich je nach
+  Mausposition um wenige Pixel (ohne Maus: ganz langsame Eigenbewegung).
+  Titel, Ring, Katze, Boden und Bedienleiste bleiben fest.
+- "Nach Start automatisch minimieren" ist jetzt standardmäßig AUS und auch im
+  Zahnrad-Menü (Einstellungen) schaltbar; Tray-Menü und Zahnrad bleiben synchron.
+  Hinweis: Die Einstellung wird unter neuem Namen gespeichert, ein altes "an" aus
+  3.11–3.14 wird daher einmalig auf AUS zurückgesetzt.
+
+NEU in 3.14 – ruhig und statisch
+- Neon-Flackern aus 3.13 komplett entfernt. Rote Ränder und Knöpfe sind
+  wieder konstant – kein Glow, kein Flackern, statisches sauberes Bild.
+- Sonst alles wie 3.11 (Hintergrund, Katze, weniger Rot, Tray-Option,
+  Fensterknöpfe, feste Schrift, Finale).
+
+NEU in 3.13 – Glow raus, Neon-Flackern rein
+- Glow/Halation (3.8–3.12) komplett entfernt – Optik wieder wie vor 3.8,
+  mit allen Verbesserungen aus 3.11 (Hintergrund, Katze, Tray-Option usw.).
+- Die vorhandenen roten Leuchtränder (Ring, Knöpfe, Fensterknöpfe, Leiste)
+  flackern jetzt gelegentlich wie eine defekte Neonröhre: meist stabil,
+  alle ca. 2–9 Sekunden (zufällig) eine kurze Störung von 0,15–0,9 s mit
+  unregelmäßigen Aussetzern (25–110 ms, 20–75 % dunkler). Nur die roten
+  Ränder, nicht das ganze Bild.
+
+NEU in 3.12 – Glow und Halation jetzt wirklich sichtbar
+- Fehler behoben: Die Glow-Schicht wurde von Windows (GDI+) beim Zeichnen
+  praktisch weggeklemmt und war im echten Fenster kaum zu sehen.
+  Jetzt eine saubere Überblend-Schicht über dem fertigen Fensterbild.
+- Deutlich kräftigerer, breiterer Schein um Ring, Ziffern, Knöpfe und
+  helle Kanten, stärkere warme Halation; weich begrenzt, keine weißen Flächen.
+- Sanftes Pulsieren (±22 %, 5 s) bleibt, um ein höheres Grundniveau.
+- Sonst alles wie 3.11.
+
+NEU in 3.11 – neuer Hintergrund + Tray-Option
+- Hintergrund neu interpretiert: linke Szene (Türme, Terminator-Schädel,
+  Trümmer) und rechte Szene (Stadt, Sonne, Fluss, graue Britisch Kurzhaar
+  im Gegenlicht) sauber neu erzeugt – deutlich weniger KI-Artefakte.
+  Titel, Ring, Anzeige, Leiste und Fensterknöpfe bleiben an ihrem Platz.
+- Infobereich (Tray), Rechtsklick: neue Option mit Häkchen
+  "Nach Start automatisch minimieren" (Standard: an = wie bisher).
+  Abgewählt bleibt das Fenster nach START offen. Wird gespeichert.
+- Schimmer-Glow und alles andere unverändert.
+
+NEU in 3.10 – Katze besser eingebettet
+- Die graue Britisch Kurzhaar ist jetzt an das Gegenlicht angepasst:
+  dunkler, weniger Kontrast, warmer Sonnenuntergang-Farbstich statt
+  Blaugrau, Schattenseite zum Betrachter, warmes Rim-Light an den Konturen.
+- Weichere Kanten, Bodenschatten und Spiegelung im nassen Boden.
+- Pose, Größe und Position unverändert; Schimmer-Glow und alles andere wie 3.9.
+
+NEU in 3.9 – sanft pulsierender Glow
+- Glow und Halation aus 3.8 schimmern jetzt langsam und ruhig:
+  Sinus-Puls, 5 Sekunden pro Zyklus, Intensität nur ±22 %. Kein Flackern.
+- Effizient: Puls ca. 16 Bilder/s, nur der leuchtende Bereich wird neu
+  gezeichnet; der Glow selbst wird höchstens ~16x pro Sekunde neu berechnet.
+- Katze im Hintergrund durch eine graue Britisch Kurzhaar ersetzt
+  (gleiche Pose, Größe und Position).
+- Sonst nichts geändert (Farben, Layout, Schrift, Fensterknöpfe,
+  Finale wie in 3.8).
+
+NEU in 3.8 – Glow und Halation
+- Dezenter weicher Glow (Bloom) auf leuchtenden Elementen (Ring, Ziffern,
+  Knöpfe, Lichter) und eine subtile Halation (warmes Abstrahlen heller Kanten).
+- Sonst nichts geändert: Layout, Farben (weniger Rot aus 3.7), Schrift,
+  Hintergrund, Fensterknöpfe und Finale wie in 3.7.
+
+NEU in 3.7 – weniger Rot
+- Live gezeichnete Elemente (Ring-Glühen, 7-Segment-Ziffern, aktive Knöpfe,
+  Status-Text, Hover-/Fokus-Rahmen) in ruhigerem, dunklerem, weniger
+  gesättigtem Rot.
+- Hintergrund: kräftige Rottöne ca. 35 % entsättigt/abgedunkelt.
+  Orangener Sonnenuntergang und rotes "!" im Titel bleiben.
+- Das Finale ist unverändert und wird weiterhin komplett rot.
+
+NEU in 3.6 – das finale Design
+- Hintergrund ist jetzt genau das finale Bild (Stadt mit Fluss und Sonne, Katze, Totenkopf), unverzerrt.
+- Titel "Hasta la Vista, Windows!" und Untertitel fest wie im Bild.
+- Leiste: Knöpfe/Felder aus dem Bild, Text immer live in einer Schrift; Ziffern als 7-Segment exakt auf der Anzeige.
+- Fensterknöpfe oben rechts sind die gemalten Knöpfe: Minimieren, Schließen; Maximieren ist gesperrt (feste Größe).
+  Zahnrad erscheint links daneben, wenn die Maus über dem Fenster ist. Zahnrad-Menü: Finale ein/aus.
+
+NEU in 3.5 – neue Stadt, Katze wie gehabt, Titel fest
+- Hintergrund: die Stadt aus dem neuen Bild, die Katze aus der bisherigen Vorlage (sauber eingesetzt).
+- Titel "Hasta la Vista, WINDOWS!" und "(Keine Sorge. Es kommt wieder.)" stehen immer in der
+  Original-Schrift im Bild – nicht änderbar, nicht ausblendbar.
+- Zahnrad-Menü: nur noch Finale ein/aus, STANDARD und SCHLIESSEN.
+
+NEU in 3.4 – Titel und Untertitel immer exakt wie im Original
+- Die Felder zum Ändern der Texte im Zahnrad-Menü wurden entfernt: Die Chrom-Schrift des Designs
+  lässt sich nicht ununterscheidbar nachbauen. Titel und Untertitel kommen jetzt immer unverändert aus dem Bild.
+- Geblieben: Text oben / Text unten getrennt ein- und ausschalten, Finale ein/aus.
+
+NEU in 3.3 – eine Schrift, saubere Ziffern
+- Alle Texte der Leiste (IN, Zahl, Knöpfe, UM, Uhrzeit, Aktion, START, ABBRECHEN, Statuszeile)
+  werden jetzt immer mit derselben eingebetteten Schrift gezeichnet (Barlow Semi Condensed Medium) –
+  die Schrift ändert sich nicht mehr, wenn man Werte verstellt.
+- Die Ziffern der Zeitanzeige werden sauber als 7-Segment-Ziffern gezeichnet (gleichmäßige Strichstärke,
+  abgeschrägte Enden, Glühen) – bei jedem Wert gleich, auch im Leerlauf, und scharf bei jeder Skalierung.
+
+NEU in 3.2 – sieht jetzt genauso aus wie die Vorlage
+---------------------------------------------------
+- Das Original-Design ist direkt der Hintergrund – nur gleichmäßig skaliert
+  (Fenster 960 x 639, gleiches Seitenverhältnis wie das Bild, nichts gestreckt).
+- Bedienleiste, Titel, Untertitel, Zifferblatt: unverändert aus dem Bild.
+  Knopf-Zustände (z. B. "15 MIN" rot) und Ziffern sind Ausschnitte aus
+  demselben Bild – die Ziffern bestehen aus den Original-Leuchtsegmenten.
+- Scharf bei 125 % / 150 % / 200 % Windows-Skalierung (Per-Monitor-DPI),
+  auch beim Verschieben auf einen anderen Monitor.
+- Geänderte Werte und Statustexte in eingebetteter Schrift
+  "Barlow Semi Condensed" (SIL Open Font License, siehe Quellcode/OFL.txt).
+- Fensterknöpfe (Zahnrad, Minimieren, Schließen) erscheinen erst, wenn die
+  Maus über dem Fenster ist.
+
+NEU in 3.1 – neues Aussehen nach Design-Vorlage
+---------------------------------------------
+- Neues Hintergrundbild (Titel "WINDOWS!" mit rotem "!", neues Zifferblatt,
+  Katze rechts, Totenkopf links).
+- Bedienleiste wie im Design: dunkelgrau mit roten Akzenten, zwei Reihen,
+  größere gut lesbare Schrift (Bahnschrift).
+  Reihe 1: IN · Zahl · MIN · 15 MIN · 30 MIN · 1 STD · 2 STD · UM · 23:00
+  Reihe 2: Aktion · ▶ START · ABBRECHEN
+- Schnellwahl-Knopf leuchtet rot, wenn er der eingestellten Zeit entspricht.
+- Uhrzeit als ein Feld "23:00": Stunden oder Minuten anklicken, Pfeile stellen.
+- Statuszeile zweifarbig (BEREIT / AKTIV in Rot).
+- Zahnrad, Minimieren, Schließen: dezent oben rechts, rot beim Überfahren.
+- FINALE-Schalter jetzt nur noch im Zahnrad-Menü (Feld rechts bleibt leer
+  wie im Design).
+- 60 Glut-Striche, Anzeige, Finale und eigene Texte angepasst.
+
+NEU in 3.0 – Einstellungen (Zahnrad oben rechts)
+- Finale ein/aus.
+- Text oben (Titel) und Text unten (unter dem Zifferblatt) getrennt ein-/ausschalten
+  und frei aendern (max. 60 Zeichen). Aenderungen wirken sofort.
+- STANDARD stellt alles auf Anfang zurueck. Esc oder SCHLIESSEN schliesst das Fenster.
+- Gespeichert in %LOCALAPPDATA%\Terminator\settings.ini
+- Beim Standardtext wird das Original-Artwork gezeigt; eigener Text wird im gleichen
+  Stil (Metall + rotes Leuchten) neu gezeichnet.
+
+NEU in 2.9
+- Finale-Ende korrigiert: der rein rote Streifen faehrt in der letzten Sekunde von links
+  und rechts zur Mitte zusammen, bis nichts mehr da ist – dann schwarz. Kein weisser Kreis/Punkt.
+
+NEU in 2.8 – Das Finale
+- In der letzten Minute vor Herunterfahren/Neustart wird der ganze Bildschirm (alle Monitore)
+  immer roeter, ist kurz vor Schluss komplett rot, schrumpft zu einem roten Streifen,
+  faehrt in der letzten Sekunde von links und rechts zur Mitte zusammen und geht aus.
+- Das Overlay ist klick-durchlaessig. Abbrechen jederzeit: Strg+Alt+A oder Esc,
+  oder Rechtsklick aufs Tray-Symbol -> "Abbrechen". Das Overlay verschwindet sofort.
+- Schalter FINALE (unten rechts) bzw. Tray-Menue "Finale-Effekt": an/aus (Standard: an).
+- Bei Energiesparen/Ruhezustand gibt es kein Finale.
+
+NEU in 2.7
+- Glut-Ring wird komplett aus Start- und Zielzeit berechnet: auch nach dem Holen aus dem Tray
+  oder nach einem Neustart des Programms ist der Ring sofort korrekt gefüllt.
+- "(Keine Sorge. Es kommt wieder.)" steht jetzt unterhalb des Zifferblatts.
+
+NEU in 2.6: Keine Windows-Meldungen mehr ("Sie werden abgemeldet" bzw.
+"Herunterfahren abgebrochen"). Der Terminator zählt selbst und fährt bei
+00:00:00 sofort herunter.
+
+Glut-Ring: Glut-Ring mit 60 Blöcken. Nach START blitzt jede Sekunde ein
+Block auf und kühlt in ca. 20-30 s zu dunkelroter Glut ab, die bleibt -
+so füllt sich der Ring in einer Minute. In der nächsten Runde wird jeder
+Block neu entfacht. Vor dem Start ist der Ring dunkel, nur der Leuchtkreis
+pulsiert. Die Digitalanzeige fügt sich jetzt ohne Rand ins Bild ein. Der Countdown läuft live in der Digitalanzeige. Nach dem Start verschwindet das
+Fenster in den Infobereich (unten rechts neben der Uhr).
+
+
+EMPFOHLEN: Die Skript-Version (ohne Windows-Warnung)
+----------------------------------------------------
+1. ZIP komplett entpacken, z. B. nach "Dokumente\Terminator".
+   Danach den Ordner nicht mehr verschieben.
+2. Einmal Doppelklick auf "Verknüpfung erstellen.bat".
+   Jetzt liegt auf dem Desktop "Terminator" mit dem Timer-Symbol.
+3. Ab jetzt einfach diese Desktop-Verknüpfung doppelklicken.
+   (Alternativ direkt "Terminator starten.vbs" doppelklicken.)
+
+Falls Windows meldet, dass die Datei aus dem Internet stammt oder sie sich
+nicht öffnen lässt: Rechtsklick auf die Datei > Eigenschaften > unten
+"Zulassen" anhaken > OK. Am einfachsten macht man das gleich beim ZIP,
+BEVOR man es entpackt, dann gilt es für alle Dateien.
+
+
+Bedienung
+---------
+- Alle Bedienelemente liegen mittig in einer roten Neon-Leiste unter dem Bild.
+- Zeit wählen, obere Reihe: "IN" + Zahl + MIN/STD (Klick auf MIN/STD wechselt)
+  oder die Knöpfe 15 MIN, 30 MIN, 1 STD, 2 STD. Oder "UM" + Stunde : Minute.
+  Ist die Uhrzeit heute schon vorbei, gilt morgen.
+- Zahlenfelder: Pfeile rechts im Feld anklicken, Mausrad drehen oder Feld
+  anklicken und Ziffern tippen. Enter startet den Timer.
+- Aktion, untere Reihe links: Klick öffnet die Liste (Herunterfahren,
+  Neu starten, Energiesparen, Ruhezustand).
+- "START": Das Fenster verschwindet still in den Infobereich (keine Meldung).
+- Maus auf das Symbol halten: Restzeit wird angezeigt.
+- Doppelklick auf das Symbol: Fenster öffnen.
+- Rechtsklick auf das Symbol: "Fenster öffnen", "Abbrechen", "Beenden".
+  Tipp: Ist das Symbol nicht zu sehen, auf den kleinen Pfeil ^ unten rechts
+  klicken.
+- Fenster ohne Windows-Titelleiste: Oben rechts "–" = minimieren,
+  "X" = schließen (läuft ein Timer, verschwindet das Fenster nur in den
+  Infobereich, der Timer läuft weiter). Verschieben: auf eine freie
+  Stelle im Bild klicken und ziehen. Esc oder Alt+F4 schließen ebenfalls.
+
+Wichtig:
+- Der Terminator zählt selbst und löst die Aktion bei 00:00:00 sofort aus,
+  ohne Vorwarnung und ohne Windows-Meldung. Dafür muss er im Infobereich
+  laufen: Nach "Beenden" passiert nichts. Abbrechen geht still, ohne Meldung.
+- Wird das Programm geschlossen und wieder geöffnet, läuft ein noch nicht
+  abgelaufener Countdown automatisch weiter.
+- Bei "Herunterfahren"/"Neu starten" verhindert der Terminator, dass der PC
+  während des Countdowns von selbst in den Energiesparmodus geht.
+- Umstieg von einer alten Version (bis 2.5): Diese hatten das Herunterfahren
+  zusätzlich bei Windows angemeldet. Lief dort noch ein Timer, fährt Windows
+  zu der alten Zeit trotzdem herunter. Wer das verhindern will, öffnet die
+  ALTE Version und klickt "Abbrechen" (dann kommt einmalig noch die Windows-
+  Meldung) - oder lässt den alten Termin einfach ablaufen.
+- Vorher speichern! Offene Programme werden geschlossen.
+- Keine Installation und keine Adminrechte nötig (Windows 10 und 11).
+
+
+Warum hat Windows bei der .exe gewarnt?
+---------------------------------------
+Das Programm ist harmlos, aber selbst erstellt und nicht mit einem
+(kostenpflichtigen) Zertifikat signiert. Windows Defender/SmartScreen
+kennt es daher nicht. Dazu kommt: Ein unbekanntes Programm, das den PC
+herunterfährt, wirkt für Virenscanner verdächtig. Das ist ein Fehlalarm.
+Die Skript-Version oben ist offener, Windows führt einfach
+die eingebaute PowerShell aus, und du kannst den Inhalt mit dem Editor
+lesen.
+
+
+Alternative: EXE-Version (Ordner "EXE-Version")
+-----------------------------------------------
+Funktioniert genauso. Falls SmartScreen warnt: "Weitere Informationen" >
+"Trotzdem ausführen". Falls Defender die Datei entfernt, bitte die
+Skript-Version nutzen.
+
+
+Inhalt
+------
+Terminator.ps1               das eigentliche Programm (Skript)
+Terminator starten.vbs       startet es ohne schwarzes Fenster
+Verknüpfung erstellen.bat            legt die Desktop-Verknüpfung an
+Verknuepfung-erstellen.ps1           wird von der .bat benutzt
+Terminator-v2.ico            das Symbol (Power-Knopf)
+Daten\TimerUI.dll                    Fenster und Logik, fertig übersetzt
+                                     (nicht löschen! macht den Start schnell)
+Terminator-3.16.exe   alternative Programmversion
+EXE-Version\Quellcode\               Programmcode der EXE zum Nachlesen
+
+Symbol aktualisieren (neues Programmsymbol wird nicht angezeigt?)
+------------------------------------------------------------------
+Das Symbol heißt jetzt "Terminator-v2.ico" (neuer Name, damit Windows nicht
+das alte, zwischengespeicherte Bild weiterverwendet).
+1. Alte entpackte Ordner dieses Programms löschen und das neue ZIP verwenden.
+2. "Verknüpfung erstellen.bat" doppelklicken: Die alte Desktop-Verknüpfung wird
+   gelöscht, eine neue angelegt und der Symbol-Zwischenspeicher von Windows
+   aufgefrischt (ie4uinit.exe -show).
+3. Ist eine alte Verknüpfung an die Taskleiste/das Startmenü angeheftet: dort
+   lösen und die neue Desktop-Verknüpfung erneut anheften.
+4. Zeigt Windows trotzdem noch das alte Bild: einmal ab- und wieder anmelden.
