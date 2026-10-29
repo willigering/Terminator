@@ -6,10 +6,8 @@
 | Datei | Für | Inhalt |
 |---|---|---|
 | `Terminator-Windows.zip` | **Windows 10/11** (.NET Framework 4.8, vorinstalliert) | `Terminator-3.16.exe`, `Daten\TimerUI.dll`, `Terminator.ps1`, `Terminator starten.vbs`, `Verknüpfung erstellen.bat`, `LIESMICH.txt` |
-| `Terminator-Linux.zip` | Linux – **nur experimentell über Wine, ungetestet** | Windows-Paket + `terminator-wine.sh` + `LINUX.md` |
 
 Windows: ZIP entpacken, `Terminator-3.16.exe` starten (EXE und Ordner `Daten` müssen zusammenbleiben).
-Linux: kein nativer Build – siehe [linux/LINUX.md](linux/LINUX.md).
 
 ## Schritte
 1. Quellcode pushen (`git push`), Tag setzen: `git tag v3.16 && git push origin v3.16`
