@@ -41,3 +41,13 @@ und ein Pre-Release eignet sich zum Testen, ohne dass Nutzer es angeboten bekomm
   Größe + SHA-256, Programmkennung und Version der neuen Dateien. Wer das GitHub-Konto kontrolliert, kann ein Update
   ausliefern – deshalb 2FA für das Konto aktiv halten.
 - Der Dateiname `Terminator-Windows.zip` und die EXE `Terminator.exe` dürfen sich nicht mehr ändern.
+
+## Virenprüfung (VirusTotal)
+
+Nach dem Anlegen des Release-Entwurfs das ZIP und die EXE prüfen lassen und das Ergebnis an die Release Notes anhängen (Python 3, nur Standardbibliothek; Schlüssel als Umgebungsvariable, nie committen):
+
+    $env:VIRUSTOTAL_API_KEY = '...'
+    python tools/virustotal_scan.py dist/Terminator-Windows.zip --repo willigering/Terminator --tag v3.17
+    python tools/virustotal_scan.py Terminator/Terminator.exe --repo willigering/Terminator --tag v3.17
+
+Das Skript lädt die Datei hoch (>32 MB über `upload_url`), wartet auf die Analyse (max. 4 Anfragen/Minute), gibt die Erkennungen und den Link `https://www.virustotal.com/gui/file/<sha256>` aus und hängt einen Abschnitt „Virenprüfung“ (Link, „x/y Scanner ohne Befund“, Datum) an. Bei VT-Fehlern endet es mit Code 2, das Release selbst ist davon nicht betroffen. Das Secret `VIRUSTOTAL_API_KEY` ist im Repo für einen späteren Actions-Workflow hinterlegt.
