@@ -108,15 +108,18 @@ public class Settings
 {
     public const string DefaultTop = "HASTA LA VISTA, WINDOWS", DefaultBottom = "(Keine Sorge. Es kommt wieder.)";
     public bool Finale = true, TopOn = true, BottomOn = true, AutoMinimize = false; // 3.15: Standard AUS
+    // 3.17: Auto-Update (Standard AN; letzte erfolgreiche Prüfung in UTC-Ticks + ETag für bedingte GitHub-Anfragen)
+    public bool UpdateCheck = true; public long UpdateLastTicks; public string UpdateEtag = "";
     public string Top = DefaultTop, Bottom = DefaultBottom;
     public bool TopIsDefault { get { return Top == DefaultTop; } }
     public bool BottomIsDefault { get { return Bottom == DefaultBottom; } }
-    public void Reset() { Finale = true; AutoMinimize = false; TopOn = true; BottomOn = true; Top = DefaultTop; Bottom = DefaultBottom; }
+    public void Reset() { Finale = true; AutoMinimize = false; UpdateCheck = true; TopOn = true; BottomOn = true; Top = DefaultTop; Bottom = DefaultBottom; }
     static string Esc(string v) { return (v ?? "").Replace("\\", "\\\\").Replace("\r", "").Replace("\n", "\\n"); }
     static string Unesc(string v) { var sb = new System.Text.StringBuilder(); for (int i = 0; i < v.Length; i++) { if (v[i] == '\\' && i + 1 < v.Length) { i++; sb.Append(v[i] == 'n' ? ' ' : v[i]); } else sb.Append(v[i]); } return sb.ToString(); }
     public string Serialize()
     {
-        return "finale=" + (Finale ? 1 : 0) + "\n" + "top_on=" + (TopOn ? 1 : 0) + "\n" + "top=" + Esc(Top) + "\n" + "bottom_on=" + (BottomOn ? 1 : 0) + "\n" + "bottom=" + Esc(Bottom) + "\n" + "min_after_start=" + (AutoMinimize ? 1 : 0) + "\n";
+        return "finale=" + (Finale ? 1 : 0) + "\n" + "top_on=" + (TopOn ? 1 : 0) + "\n" + "top=" + Esc(Top) + "\n" + "bottom_on=" + (BottomOn ? 1 : 0) + "\n" + "bottom=" + Esc(Bottom) + "\n" + "min_after_start=" + (AutoMinimize ? 1 : 0) + "\n"
+             + "update_check=" + (UpdateCheck ? 1 : 0) + "\n" + "update_last=" + UpdateLastTicks + "\n" + "update_etag=" + Esc(UpdateEtag) + "\n";
     }
     public static Settings Parse(string text)
     {
@@ -130,6 +133,9 @@ public class Settings
             {
                 case "finale": st.Finale = v.Trim() != "0"; break;
                 case "min_after_start": st.AutoMinimize = v.Trim() != "0"; break; // 3.15: neuer Schlüssel, alter "auto_min" (3.11–3.14, Standard an) wird ignoriert
+                case "update_check": st.UpdateCheck = v.Trim() != "0"; break;
+                case "update_last": long t; if (long.TryParse(v.Trim(), out t) && t >= 0 && t <= DateTime.MaxValue.Ticks) st.UpdateLastTicks = t; break;
+                case "update_etag": st.UpdateEtag = Clip(Unesc(v), 200); break;
                 case "top_on": st.TopOn = v.Trim() != "0"; break;
                 case "bottom_on": st.BottomOn = v.Trim() != "0"; break;
                 case "top": st.Top = Clip(Unesc(v)); break;
@@ -139,5 +145,6 @@ public class Settings
         return st;
     }
     public const int MaxLen = 60;
-    public static string Clip(string v) { v = (v ?? "").Replace("\r", " ").Replace("\n", " "); return v.Length > MaxLen ? v.Substring(0, MaxLen) : v; }
+    public static string Clip(string v) { return Clip(v, MaxLen); }
+    static string Clip(string v, int max) { v = (v ?? "").Replace("\r", " ").Replace("\n", " "); return v.Length > max ? v.Substring(0, max) : v; }
 }

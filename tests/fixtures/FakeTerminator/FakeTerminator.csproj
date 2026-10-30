@@ -1,0 +1,4 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!-- Testpaket-Attrappe: Assembly "Terminator" in Version 9.9.0 (nur für die Updater-Tests) -->
+  <PropertyGroup><TargetFramework>net8.0</TargetFramework><AssemblyName>Terminator</AssemblyName><Version>9.9.0</Version><AssemblyVersion>9.9.0.0</AssemblyVersion></PropertyGroup>
+</Project>
