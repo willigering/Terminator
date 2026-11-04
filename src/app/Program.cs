@@ -622,7 +622,8 @@ class MainForm : Form
         if (resize) ClientSize = new Size((int)Math.Round(Art.LogicalW * k), (int)Math.Round(Art.LogicalH * k));
         if (bgCache != null) { bgCache.Dispose(); bgCache = null; }
         if (farCache != null) { farCache.Dispose(); farCache = null; }
-        if (settingsPanel != null) settingsPanel.ApplyScale(k, new Point((int)Math.Round(606 * k), (int)Math.Round(176 * k)));
+        if (settingsPanel != null) settingsPanel.ApplyScale(k, new Point((int)Math.Round(SetX * k), (int)Math.Round(SetY * k)));
+        if (updatePanel != null) updatePanel.ApplyScale(k, new Point((int)Math.Round(UpdX * k), (int)Math.Round(UpdY * k)));
         Invalidate();
     }
     protected override void OnHandleCreated(EventArgs e) { base.OnHandleCreated(e); ApplyScale(QueryScale(), true); }
@@ -687,10 +688,11 @@ class MainForm : Form
         VisibleChanged += (s, e) => UpdateAnim();
         FormClosing += OnClosing;
         Resize += (s, e) => { if (WindowState == FormWindowState.Minimized && running) Hide(); UpdateAnim(); };
-        settingsPanel = new SettingsPanel(settings, OnSettingsChanged) { Location = new Point(606, 176) };
+        settingsPanel = new SettingsPanel(settings, OnSettingsChanged, () => StartUpdateCheck(true)) { Location = new Point(SetX, SetY) };
         settingsPanel.VisibleChanged += (s, e) => InvalidateWin();
         Controls.Add(settingsPanel);
-        settingsPanel.ApplyScale(Scale, new Point((int)Math.Round(606 * Scale), (int)Math.Round(176 * Scale)));
+        settingsPanel.ApplyScale(Scale, new Point((int)Math.Round(SetX * Scale), (int)Math.Round(SetY * Scale)));
+        InitUpdater();
         RestoreState();
     }
 
@@ -919,6 +921,7 @@ class MainForm : Form
     bool typed;
     void OnKey(object s, KeyEventArgs e)
     {
+        if (updatePanel != null && updatePanel.Visible) { if (e.KeyCode == Keys.Escape) { OnUpdateLater(); e.Handled = true; } return; } // 3.17
         if (settingsPanel.Visible) { if (e.KeyCode == Keys.Escape) { settingsPanel.Visible = false; InvalidateWin(); e.Handled = true; } return; }
         if (listOpen && e.KeyCode == Keys.Escape) { CloseList(); return; }
         if (e.KeyCode == Keys.Escape && focusedNum == null) { Close(); return; }
@@ -994,6 +997,7 @@ class MainForm : Form
         if (running) fadeStart = clock.Elapsed.TotalSeconds;
         running = false; tick.Stop(); SetSetup(true);
         shown = 0; status = "BEREIT – Zeit und Aktion wählen, dann START"; tray.Text = "Terminator"; Invalidate();
+        MaybeShowUpdate(); // 3.17: während des Countdowns zurückgehaltenen Hinweis jetzt zeigen
     }
 
     // ---------- logic ----------
@@ -1158,6 +1162,126 @@ class MainForm : Form
     }
     int left0() { return Core.SecondsUntil(DateTime.Now, target); }
 
+    // ---------- 3.17: Auto-Update über GitHub Releases ----------
+    const int SetX = 590, SetY = 176, UpdX = 260, UpdY = 140;
+    static readonly string UpdateCache = Path.Combine(Path.GetDirectoryName(SettingsFile), "update-cache.json");
+    static readonly string UpdateWork = Path.Combine(Path.GetTempPath(), "Terminator-update");
+    static readonly Version Installed = UpdateCore.Norm(typeof(MainForm).Assembly.GetName().Version);
+    UpdatePanel updatePanel; UpdateInfo pendingUpdate; bool updateDismissed, checking, downloading, cancelDownload;
+    readonly Timer updateDelay = new Timer();
+
+    void InitUpdater()
+    {
+        updatePanel = new UpdatePanel(OnUpdateGo, OnUpdateLater) { Location = new Point(UpdX, UpdY) };
+        Controls.Add(updatePanel);
+        updatePanel.ApplyScale(Scale, new Point((int)Math.Round(UpdX * Scale), (int)Math.Round(UpdY * Scale)));
+        // Start nicht blockieren: automatische Prüfung kurz nach dem Start im Hintergrund, höchstens alle 24 h
+        updateDelay.Interval = 4000;
+        updateDelay.Tick += (s, e) => { updateDelay.Stop(); if (settings.UpdateCheck && UpdateCore.DueForAutoCheck(DateTime.UtcNow, LastCheckUtc())) StartUpdateCheck(false); };
+        updateDelay.Start();
+    }
+    DateTime LastCheckUtc() { return settings.UpdateLastTicks > 0 ? new DateTime(settings.UpdateLastTicks, DateTimeKind.Utc) : DateTime.MinValue; }
+
+    void StartUpdateCheck(bool manual)
+    {
+        if (checking || downloading) return;
+        checking = true;
+        if (manual) settingsPanel.SetUpdateStatus("Prüfe …");
+        string etag = settings.UpdateEtag;
+        System.Threading.ThreadPool.QueueUserWorkItem(_ =>
+        {
+            string err, newEtag; UpdateInfo info = null;
+            try { err = new UpdateClient(Installed, UpdateCache).Check(etag, out newEtag, out info); }
+            catch (Exception ex) { err = ex.Message; newEtag = etag; }
+            try { if (!IsDisposed) BeginInvoke(new Action(() => OnUpdateChecked(manual, err, newEtag, info))); } catch { }
+        });
+    }
+
+    void OnUpdateChecked(bool manual, string err, string etag, UpdateInfo info)
+    {
+        checking = false;
+        if (err == null) { settings.UpdateLastTicks = DateTime.UtcNow.Ticks; settings.UpdateEtag = etag ?? ""; SaveSettings(); }
+        if (manual) settingsPanel.SetUpdateStatus(err != null ? err : info != null ? "Version " + UpdateCore.Show(info.Version) + " verfügbar" : "Aktuell – " + UpdateCore.Show(Installed) + " ist die neueste Version");
+        if (info == null) return;
+        pendingUpdate = info;
+        if (manual) updateDismissed = false;
+        MaybeShowUpdate();
+    }
+
+    void MaybeShowUpdate()
+    {
+        if (pendingUpdate == null || updateDismissed || running || downloading || updatePanel == null || updatePanel.Visible) return;
+        updatePanel.ShowOffer(pendingUpdate, Installed);
+        settingsPanel.Visible = false; listOpen = false;
+        updatePanel.Visible = true; updatePanel.BringToFront(); updatePanel.Focus();
+        tray.ShowBalloonTip(5000, "Terminator", "Update " + UpdateCore.Show(pendingUpdate.Version) + " verfügbar", ToolTipIcon.Info);
+    }
+
+    void OnUpdateLater()
+    {
+        if (downloading) { cancelDownload = true; return; }
+        updateDismissed = true; updatePanel.Visible = false; Invalidate();
+    }
+
+    // Programmordner + Neustart-Ziel; null, wenn es kein vollständiger Terminator-Ordner ist
+    static string InstallDir(out string restart)
+    {
+        restart = null;
+        try
+        {
+            if (Program.ScriptMode)
+            {
+                string d = Program.ScriptDir;
+                if (string.IsNullOrEmpty(d) || !File.Exists(Path.Combine(d, "Terminator.ps1")) || !File.Exists(Path.Combine(d, "Daten", "TimerUI.dll"))) return null;
+                restart = Path.Combine(d, "Terminator starten.vbs"); return File.Exists(restart) ? d : null;
+            }
+            string exe = Application.ExecutablePath, dir = Path.GetDirectoryName(exe);
+            if (!string.Equals(Path.GetFileName(exe), UpdateCore.ExeName, StringComparison.OrdinalIgnoreCase) || !File.Exists(Path.Combine(dir, "Daten", "TimerUI.dll"))) return null;
+            restart = Path.Combine(dir, UpdateCore.ExeName); return dir;
+        }
+        catch { return null; }
+    }
+
+    void OpenReleasePage(string why)
+    {
+        updatePanel.SetState(true, "JETZT AKTUALISIEREN", "SCHLIESSEN", why + " – Release-Seite wurde geöffnet.", true);
+        try { Process.Start(new ProcessStartInfo(pendingUpdate != null ? pendingUpdate.HtmlUrl : UpdateCore.ReleasesPage) { UseShellExecute = true }); } catch { }
+    }
+
+    void OnUpdateGo()
+    {
+        var info = pendingUpdate; if (info == null || downloading) return;
+        if (running) { updatePanel.SetState(false, "JETZT AKTUALISIEREN", "SPÄTER", "Während ein Countdown läuft, wird nicht aktualisiert.", true); return; }
+        string restart, dir = InstallDir(out restart);
+        if (dir == null) { OpenReleasePage("Kein vollständiger Terminator-Ordner"); return; }
+        if (!UpdateCore.IsWritable(dir)) { OpenReleasePage("Ordner ist schreibgeschützt"); return; }
+        downloading = true; cancelDownload = false;
+        updatePanel.SetState(false, "LÄDT …", "ABBRECHEN", "Download über HTTPS …", false);
+        string work = Path.Combine(UpdateWork, UpdateCore.Show(info.Version)), zip = Path.Combine(work, UpdateCore.ZipName), ext = Path.Combine(work, "neu");
+        int lastPct = -1;
+        System.Threading.ThreadPool.QueueUserWorkItem(_ =>
+        {
+            string root = null;
+            string err = new UpdateClient(Installed, UpdateCache).Download(info, zip, (n, total) =>
+            {
+                int pct = (int)(n * 100 / Math.Max(1, total));
+                if (pct != lastPct) { lastPct = pct; try { BeginInvoke(new Action(() => updatePanel.SetState(false, "LÄDT … " + pct + " %", "ABBRECHEN", "Download über HTTPS …", false))); } catch { } }
+            }, () => cancelDownload);
+            if (err == null) err = UpdateClient.Stage(info, zip, ext, out root);
+            try { BeginInvoke(new Action(() => OnUpdateReady(err, work, root, dir, restart))); } catch { }
+        });
+    }
+
+    void OnUpdateReady(string err, string work, string root, string dir, string restart)
+    {
+        downloading = false;
+        if (err == null && running) err = "Während ein Countdown läuft, wird nicht aktualisiert.";
+        if (err == null) err = UpdateClient.LaunchSwap(work, root, dir, restart);
+        if (err != null) { updatePanel.SetState(true, "ERNEUT VERSUCHEN", "SPÄTER", err, true); return; }
+        updatePanel.SetState(false, "INSTALLIERE …", "SPÄTER", "Terminator wird beendet, aktualisiert und neu gestartet.", false);
+        exiting = true; tray.Visible = false; Application.Exit();
+    }
+
     void SaveState() { try { Directory.CreateDirectory(Path.GetDirectoryName(StateFile)); File.WriteAllText(StateFile, Core.Serialize(act, target, startTime)); } catch { } }
     void ClearState() { try { File.Delete(StateFile); } catch { } }
     void RestoreState()
@@ -1210,10 +1334,16 @@ static class Power
 }
 
 // Einstieg für die Skript-Version: powershell lädt die DLL und ruft Run() auf
-public static class TimerHost { public static void Run() { Program.Start(); } }
+// 3.17: Run(ordner) übergibt den Programmordner (für das Auto-Update); Run() ohne Ordner bleibt kompatibel.
+public static class TimerHost
+{
+    public static void Run() { Run(null); }
+    public static void Run(string scriptDir) { Program.ScriptMode = true; Program.ScriptDir = scriptDir; Program.Start(); }
+}
 
 static class Program
 {
+    public static bool ScriptMode; public static string ScriptDir;
     [STAThread]
     static void Main() { Start(); }
     public static void Start()

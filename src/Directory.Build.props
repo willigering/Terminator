@@ -1,0 +1,10 @@
+<Project>
+  <!-- Einzige Quelle der Versionsnummer (EXE, TimerUI.dll, Update-Prüfung, Release-Skript).
+       Bei jedem Release erhöhen; der Git-Tag lautet v<Major>.<Minor> bzw. v<Major>.<Minor>.<Patch>. -->
+  <PropertyGroup>
+    <TerminatorVersion>3.17.0</TerminatorVersion>
+    <Version>$(TerminatorVersion)</Version>
+    <FileVersion>$(TerminatorVersion).0</FileVersion>
+    <AssemblyVersion>$(TerminatorVersion).0</AssemblyVersion>
+  </PropertyGroup>
+</Project>

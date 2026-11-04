@@ -2,12 +2,12 @@
   <PropertyGroup>
     <OutputType>Library</OutputType><TargetFramework>net48</TargetFramework>
     <AssemblyName>TimerUI</AssemblyName><LangVersion>7.3</LangVersion><EnableDefaultCompileItems>false</EnableDefaultCompileItems>
-    <Product>Terminator</Product><Version>3.16.0</Version><Description>Terminator (Herunterfahr-Timer) – Oberfläche für die Skript-Version</Description><DebugType>none</DebugType>
+    <Product>Terminator</Product><Description>Terminator (Herunterfahr-Timer) – Oberfläche für die Skript-Version</Description><DebugType>none</DebugType>
     <NoWarn>CS7022</NoWarn>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="../app/Program.cs;../app/Core.cs;../app/Finale.cs;../app/SettingsUI.cs;../app/Art.cs;../app/Sprites.cs;../app/Tone.cs" />
-    <Reference Include="System.Windows.Forms" /><Reference Include="System.Drawing" />
+    <Compile Include="../app/Program.cs;../app/Core.cs;../app/Finale.cs;../app/SettingsUI.cs;../app/Art.cs;../app/Sprites.cs;../app/Tone.cs;../app/UpdateCore.cs;../app/Updater.cs;../app/UpdateUI.cs" />
+    <Reference Include="System.Windows.Forms" /><Reference Include="System.IO.Compression" /><Reference Include="System.IO.Compression.FileSystem" /><Reference Include="System.Drawing" />
     <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="all" />
     <EmbeddedResource Include="../app/design.png" LogicalName="design.png" /><EmbeddedResource Include="../app/far.png" LogicalName="far.png" /><EmbeddedResource Include="../app/sprites.png" LogicalName="sprites.png" /><EmbeddedResource Include="../app/BarlowSemiCondensed-Regular.ttf" LogicalName="BarlowSemiCondensed-Regular.ttf" /><EmbeddedResource Include="../app/BarlowSemiCondensed-Medium.ttf" LogicalName="BarlowSemiCondensed-Medium.ttf" /><EmbeddedResource Include="../app/Terminator-v2.ico" LogicalName="app.ico" />
   </ItemGroup>

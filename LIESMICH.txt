@@ -1,9 +1,11 @@
-﻿NEUE EXE: "Terminator-3.16.exe" (liegt direkt in diesem Ordner)
+﻿PROGRAMM: "Terminator.exe" (liegt direkt in diesem Ordner)
 -----------------------------------------------------------
-Diese EXE hat das neue Symbol eingebaut und läuft für sich allein –
-du kannst sie direkt auf den Desktop kopieren und dort starten.
-Alte EXE-Dateien bzw. alte Desktop-Kopien bitte löschen. Durch den neuen
-Dateinamen zeigt Windows sofort das neue Symbol (kein alter Cache-Eintrag).
+Ab 3.17 heißt die EXE immer "Terminator.exe" (ohne Versionsnummer), damit
+sich der Terminator selbst aktualisieren kann. Bitte einmalig alte
+Verknüpfungen bzw. alte "Terminator-3.xx.exe" löschen und
+"Verknüpfung erstellen.bat" erneut ausführen.
+Damit das Auto-Update funktioniert, muss die EXE in diesem Ordner bleiben
+(zusammen mit dem Ordner "Daten").
 
 Terminator
 ==========
@@ -11,6 +13,15 @@ Herunterfahr-Timer
 
 "Hasta la Vista, Windows!" – fährt den PC zu einer gewählten Zeit herunter,
 startet ihn neu oder schickt ihn in Energiesparen bzw. Ruhezustand.
+NEU in 3.17 – Auto-Update
+- Sucht beim Start im Hintergrund nach einer neuen Version auf GitHub
+  (höchstens einmal am Tag, offline kein Problem). Zahnrad: "Automatisch nach
+  Updates suchen" AN/AUS und "JETZT PRÜFEN".
+- Bei einem Update erscheint ein Hinweis. Installiert wird nur nach Klick auf
+  "JETZT AKTUALISIEREN" und nie während ein Countdown läuft. Download wird per
+  SHA-256 geprüft, danach startet der Terminator neu. Einstellungen bleiben.
+- EXE heißt jetzt "Terminator.exe" (siehe oben).
+
 NEU in 3.16 – Parallax etwas ruhiger
 - Parallax-Verschiebung um ca. ein Drittel reduziert (max. ~3 px seitlich,
   ~1,3 px vertikal), Eigendrift ohne Maus ebenfalls sanfter.
@@ -266,7 +277,7 @@ Verknuepfung-erstellen.ps1           wird von der .bat benutzt
 Terminator-v2.ico            das Symbol (Power-Knopf)
 Daten\TimerUI.dll                    Fenster und Logik, fertig übersetzt
                                      (nicht löschen! macht den Start schnell)
-Terminator-3.16.exe   alternative Programmversion
+Terminator.exe                alternative Programmversion
 EXE-Version\Quellcode\               Programmcode der EXE zum Nachlesen
 
 Symbol aktualisieren (neues Programmsymbol wird nicht angezeigt?)
