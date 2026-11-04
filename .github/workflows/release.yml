@@ -1,0 +1,49 @@
+name: Release (Windows)
+
+# Baut auf Windows, führt die Tests aus und veröffentlicht bei einem Tag v* das Release
+# mit Terminator-Windows.zip, terminator-update.json und SHA256SUMS (siehe RELEASE.md).
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+      - name: Tests
+        run: dotnet test tests/Terminator.Tests -c Release
+      - name: Paket bauen
+        shell: powershell
+        run: powershell -ExecutionPolicy Bypass -File tools\make-release.ps1
+      - name: Tag prüfen
+        if: startsWith(github.ref, 'refs/tags/')
+        shell: pwsh
+        run: |
+          $meta = Get-Content dist/terminator-update.json -Raw | ConvertFrom-Json
+          if ($meta.tag -ne '${{ github.ref_name }}') { throw "Tag ${{ github.ref_name }} passt nicht zur Version $($meta.version) ($($meta.tag))" }
+          $sha = (Get-FileHash dist/Terminator-Windows.zip -Algorithm SHA256).Hash.ToLowerInvariant()
+          if ((Get-Content dist/SHA256SUMS -Raw) -notmatch $sha) { throw 'SHA256SUMS stimmt nicht' }
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Terminator-Windows
+          path: dist/
+      - name: Release veröffentlichen
+        if: startsWith(github.ref, 'refs/tags/')
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $v = '${{ github.ref_name }}'.TrimStart('v')
+          $lines = Get-Content LIESMICH.txt -Encoding UTF8
+          $start = ($lines | Select-String -Pattern "^NEU in $([regex]::Escape($v))" | Select-Object -First 1).LineNumber
+          $notes = if ($start) { ($lines[($start-1)..($lines.Length-1)] | ForEach-Object -Begin { $go = $true } -Process { if ($go) { if ($_ -eq '') { $go = $false } else { $_ } } }) -join "`n" } else { "Terminator $v" }
+          [IO.File]::WriteAllText("$PWD/notes.md", $notes, (New-Object Text.UTF8Encoding($false)))
+          gh release create '${{ github.ref_name }}' dist/Terminator-Windows.zip dist/terminator-update.json dist/SHA256SUMS --title "Terminator $v" --notes-file notes.md --latest
